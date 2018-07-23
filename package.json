@@ -1,0 +1,13 @@
+{
+  "name": "codenames",
+  "version": "1.0.0",
+  "description": "An implementation of the Codenames card game for the browser",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^2.11.0"
+  }
+}
