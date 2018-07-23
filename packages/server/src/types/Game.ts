@@ -2,7 +2,7 @@ import { gql } from "apollo-server";
 import DB from "../utils/db";
 import generateID from "../utils/generate-id";
 
-class Room {
+class Game {
   id: String;
 
   constructor() {
@@ -10,28 +10,28 @@ class Room {
   }
 }
 
-const rooms = new DB<Room>();
+const games = new DB<Game>();
 
 export const typeDef = gql`
-  type Room {
+  type Game {
     id: String!
   }
 `;
 
 export const resolvers = {
   Query: {
-    room(_obj, { id }) {
-      return rooms.where({ id });
+    game(_obj, { id }) {
+      return games.where({ id });
     }
   },
 
   Mutation: {
-    createRoom() {
-      const room = new Room();
+    createGame() {
+      const game = new Game();
 
-      rooms.insert(room);
+      games.insert(game);
 
-      return room;
+      return game;
     }
   }
 };

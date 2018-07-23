@@ -2,6 +2,6 @@ import { gql } from "apollo-server";
 
 export const typeDef = gql`
   type Query {
-    room(id: String!): Room
+    game(id: String!): Game
   }
 `;
