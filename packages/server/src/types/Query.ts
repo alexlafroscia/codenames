@@ -1,7 +1,7 @@
 import { gql } from "apollo-server";
 
 export const typeDef = gql`
-  type Mutation {
-    createRoom: Room
+  type Query {
+    game(id: String!): Game
   }
 `;
