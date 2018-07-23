@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": ["es6"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "sourceMap": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "target": "es6"
+  }
+}
