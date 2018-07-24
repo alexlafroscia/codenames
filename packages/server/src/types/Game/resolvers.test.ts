@@ -1,14 +1,12 @@
 import anyTest, { TestInterface } from "ava";
-import Game, { resolvers as gameResolvers } from ".";
+import Game, { GameContext, resolvers as gameResolvers } from ".";
 import Player from "../Player";
+import { AuthenticatedContext } from "../../context/authenticate";
 import DB from "../../utils/db";
 
 const test = anyTest as TestInterface<{
   game: Game;
-  requestContext: {
-    currentPlayer: Player;
-    games: DB<Game>;
-  };
+  requestContext: GameContext & AuthenticatedContext;
 }>;
 
 test.beforeEach(t => {

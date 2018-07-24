@@ -30,6 +30,9 @@ export const resolvers = {
   }
 };
 
+export type PlayerContext = {
+  players: DB<Player>;
+};
 export function context() {
   return {
     players
