@@ -1,7 +1,8 @@
 import { gql } from "apollo-server";
+import casual = require("casual");
 import DB from "../../utils/db";
 import generateID from "../../utils/generate-id";
-import casual = require("casual");
+import { AuthenticatedContext } from "../../context/authenticate";
 
 export default class Player {
   id: String;
@@ -24,7 +25,7 @@ export const typeDef = gql`
 
 export const resolvers = {
   Query: {
-    currentPlayer(_object, _args, context) {
+    currentPlayer(_object, _args, context: AuthenticatedContext) {
       return context.currentPlayer;
     }
   }

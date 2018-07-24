@@ -21,7 +21,9 @@ type ContextCreator<T = {}> = (
  * intersection of the things that all of the `ContextCreator`
  * functions return
  */
-export function buildContext(...contextFunctions: ContextCreator[]): Context {
+export function buildContext(
+  ...contextFunctions: ContextCreator[]
+): (RequestInfo) => Context {
   return function(param: RequestInfo) {
     return contextFunctions.reduce((acc, fn) => {
       return { ...acc, ...fn(param, acc) };
