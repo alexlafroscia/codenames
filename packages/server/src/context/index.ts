@@ -1,4 +1,5 @@
 import { context as Players } from "../types/Player";
+import { context as Games } from "../types/Game";
 import authentication from "./authenticate";
 
 type RequestInfo = object;
@@ -31,4 +32,4 @@ export function buildContext(
   };
 }
 
-export default buildContext(Players, authentication);
+export default buildContext(Games, Players, authentication);
