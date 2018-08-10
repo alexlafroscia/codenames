@@ -11,7 +11,21 @@
     "start": "lerna run start --parallel",
     "test": "lerna run test"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{css,md,js,json,ts,tsx}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "devDependencies": {
-    "lerna": "^2.11.0"
+    "husky": "^1.0.0-rc.13",
+    "lerna": "^2.11.0",
+    "lint-staged": "^7.2.0",
+    "prettier": "^1.14.2"
   }
 }
