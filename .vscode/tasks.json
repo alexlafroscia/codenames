@@ -4,7 +4,12 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Server",
+      "type": "npm",
+      "script": "start",
+      "path": "packages/client/",
+      "problemMatcher": []
+    },
+    {
       "type": "npm",
       "script": "start",
       "path": "packages/server/",
