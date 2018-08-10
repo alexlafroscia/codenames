@@ -1,0 +1,24 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Client Tests",
+      "cwd": "${workspaceFolder}/packages/client",
+      "program": "${workspaceFolder}/packages/client/node_modules/.bin/react-scripts-ts",
+      "port": 9229,
+      "args": [
+        "--inspect-brk=0.0.0.0:9229",
+        "test",
+        "--env=jsdom",
+        "--runInBand",
+        "-i"
+      ]
+    }
+  ]
+}

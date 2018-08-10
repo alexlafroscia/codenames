@@ -4,7 +4,7 @@ import { RouteComponentProps } from "@reach/router";
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 
-const FETCH_GAME = gql`
+export const FETCH_GAME = gql`
   query FetchGame($id: String!) {
     game(id: $id) {
       id 
@@ -23,8 +23,9 @@ export default class GamePage extends React.Component<GamePageProps> {
     return <>
       <Query query={FETCH_GAME} variables={{ id }}>
         {({ loading, data }) => (
-          !loading && 
-            <div>{data.game.id}</div>
+          loading
+          ? null
+          : data.game.id
         )}
       </Query>
     </>;
