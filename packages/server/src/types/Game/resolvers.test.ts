@@ -1,8 +1,13 @@
 import anyTest, { TestInterface } from "ava";
-import Game, { GameContext, resolvers as gameResolvers } from ".";
+import Game, { GameContext, resolvers } from ".";
 import Player from "../Player";
 import { AuthenticatedContext } from "../../context/authenticate";
 import DB from "../../utils/db";
+
+const {
+  Mutation: { createGame },
+  Query: { game: findGame }
+} = resolvers;
 
 const test = anyTest as TestInterface<{
   game: Game;
@@ -22,11 +27,9 @@ test.beforeEach(t => {
 });
 
 test("can query for a game", t => {
-  const game = gameResolvers.Query.game(
-    {},
-    {
-      id: t.context.game.id
-    },
+  const game = findGame(
+    undefined,
+    { id: t.context.game.id },
     t.context.requestContext
   );
 
@@ -35,7 +38,7 @@ test("can query for a game", t => {
 
 test("it uses the current user when creating a game", t => {
   const { requestContext } = t.context;
-  const game = gameResolvers.Mutation.createGame({}, {}, requestContext);
+  const game = createGame({}, {}, requestContext);
 
   t.true(game instanceof Game);
   t.is(game.createdBy, requestContext.currentPlayer);

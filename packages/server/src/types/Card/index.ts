@@ -1,5 +1,6 @@
 import { gql } from "apollo-server";
 import { Color } from "../Team";
+import { GameContext } from "../Game";
 
 export enum Role {
   Agent = "Agent",
@@ -11,6 +12,7 @@ export default class Card {
   word: String;
   role: Role;
   color?: Color;
+  revealed: Boolean = false;
 
   constructor(word: String, role: Role, color?: Color) {
     this.role = role;
@@ -30,5 +32,19 @@ export const typeDef = gql`
     role: CardRole!
     word: String!
     color: TeamColor
+    revealed: Boolean!
   }
 `;
+
+export const resolvers = {
+  Mutation: {
+    revealCard(_obj, { gameId, index }, { games }: GameContext) {
+      const game = games.where({ id: gameId });
+      const card = game.cards[index];
+
+      card.revealed = true;
+
+      return card;
+    }
+  }
+};

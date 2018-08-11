@@ -20,7 +20,7 @@ const server = new ApolloServer({
     Query.typeDef,
     Team.typeDef
   ],
-  resolvers: merge(Game.resolvers, Player.resolvers),
+  resolvers: merge(Game.resolvers, Card.resolvers, Player.resolvers),
   context
 });
 
