@@ -5,7 +5,7 @@ import { AuthenticatedContext } from "../../context/authenticate";
 import DB from "../../utils/db";
 
 const {
-  Mutation: { createGame },
+  Mutation: { createGame, resetGame },
   Query: { game: findGame }
 } = resolvers;
 
@@ -26,7 +26,7 @@ test.beforeEach(t => {
   };
 });
 
-test("can query for a game", t => {
+test("querying for a game", t => {
   const game = findGame(
     undefined,
     { id: t.context.game.id },
@@ -36,10 +36,24 @@ test("can query for a game", t => {
   t.true(game instanceof Game);
 });
 
-test("it uses the current user when creating a game", t => {
+test("creating a game", t => {
   const { requestContext } = t.context;
   const game = createGame({}, {}, requestContext);
 
-  t.true(game instanceof Game);
-  t.is(game.createdBy, requestContext.currentPlayer);
+  t.true(game instanceof Game, "A game is returned");
+  t.is(
+    game.createdBy,
+    requestContext.currentPlayer,
+    "The game was created by the current user"
+  );
+});
+
+test("resetting a game", t => {
+  const { requestContext } = t.context;
+  const game = createGame({}, {}, requestContext);
+
+  const originalCards = [...game.cards];
+  const newGame = resetGame(undefined, { gameId: game.id }, requestContext);
+
+  t.notDeepEqual(originalCards, newGame.cards, "The cards were replaced");
 });

@@ -86,6 +86,13 @@ export const resolvers = {
       games.insert(game);
 
       return game;
+    },
+
+    resetGame(_obj, { gameId: id }, { games }: GameContext) {
+      const game = games.where({ id });
+      game.start();
+
+      return game;
     }
   }
 };
