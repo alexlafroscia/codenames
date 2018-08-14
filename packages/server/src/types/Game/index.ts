@@ -1,4 +1,4 @@
-import { gql } from "apollo-server";
+import { ApolloError, gql } from "apollo-server";
 import DB from "../../utils/db";
 import generateID from "../../utils/generate-id";
 import shuffle from "../../utils/shuffle";
@@ -84,6 +84,22 @@ export const resolvers = {
       const game = new Game(currentPlayer);
 
       games.insert(game);
+
+      return game;
+    },
+
+    joinGame(
+      _obj,
+      { gameId: id },
+      { currentPlayer, games }: GameContext & AuthenticatedContext
+    ) {
+      const game = games.where({ id });
+
+      if (game.players.find(player => player === currentPlayer)) {
+        throw new ApolloError("User is already in game");
+      }
+
+      game.players.push(currentPlayer);
 
       return game;
     },

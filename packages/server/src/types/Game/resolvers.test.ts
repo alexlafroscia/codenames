@@ -5,7 +5,7 @@ import { AuthenticatedContext } from "../../context/authenticate";
 import DB from "../../utils/db";
 
 const {
-  Mutation: { createGame, resetGame },
+  Mutation: { createGame, joinGame, resetGame },
   Query: { game: findGame }
 } = resolvers;
 
@@ -48,9 +48,40 @@ test("creating a game", t => {
   );
 });
 
+test("joining a game that the player is not already in", t => {
+  const { currentPlayer } = t.context.requestContext;
+  const newPlayer = new Player();
+  t.context.requestContext.currentPlayer = newPlayer;
+
+  const updatedGame = joinGame(
+    undefined,
+    { gameId: t.context.game.id },
+    t.context.requestContext
+  );
+
+  t.deepEqual(
+    updatedGame.players,
+    [currentPlayer, newPlayer],
+    "The new player was added to the game"
+  );
+});
+
+test("joining a game that the player is already in", t => {
+  t.throws(
+    () => {
+      joinGame(
+        undefined,
+        { gameId: t.context.game.id },
+        t.context.requestContext
+      );
+    },
+    "User is already in game",
+    "Throws an error if the user is already in the game"
+  );
+});
+
 test("resetting a game", t => {
-  const { requestContext } = t.context;
-  const game = createGame({}, {}, requestContext);
+  const { game, requestContext } = t.context;
 
   const originalCards = [...game.cards];
   const newGame = resetGame(undefined, { gameId: game.id }, requestContext);
