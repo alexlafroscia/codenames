@@ -92,7 +92,7 @@ export default class Game {
 
 export const typeDef = gql`
   type Game {
-    id: String!
+    id: ID!
     createdBy: Player!
 
     redTeam: Team!

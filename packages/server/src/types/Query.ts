@@ -6,6 +6,6 @@ export const typeDef = gql`
     currentPlayer: Player
 
     # Game stuff
-    game(id: String!): Game
+    game(id: ID!): Game
   }
 `;
