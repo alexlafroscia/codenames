@@ -25,6 +25,6 @@ export const typeDef = gql`
 
   type Team {
     color: TeamColor!
-    players: [Player]!
+    players: [Player!]!
   }
 `;

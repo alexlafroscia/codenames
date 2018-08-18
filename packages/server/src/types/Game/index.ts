@@ -74,7 +74,7 @@ export const typeDef = gql`
     createdBy: Player!
     redTeam: Team!
     blueTeam: Team!
-    cards: [Card]!
+    cards: [Card!]!
   }
 `;
 
