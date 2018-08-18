@@ -1,4 +1,4 @@
-import { test } from "ava";
+import test from "ava";
 import shuffle from "./shuffle";
 
 test("it shuffles the array without mutating the original", t => {
