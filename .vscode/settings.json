@@ -1,4 +1,5 @@
 {
   "editor.formatOnSave": true,
-  "npm.autoDetect": "on"
+  "npm.autoDetect": "on",
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
