@@ -4,7 +4,7 @@ import generateID from "../../utils/generate-id";
 import shuffle from "../../utils/shuffle";
 import Player from "../Player";
 import Team from "../Team";
-import Card, { Role as CardRole } from "../Card";
+import Card, { Role as CardRole, Role } from "../Card";
 import { Color as TeamColor } from "../Team";
 import { AuthenticatedContext } from "../../context/authenticate";
 
@@ -33,6 +33,28 @@ export default class Game {
 
   get players() {
     return [...this.redTeam.players, ...this.blueTeam.players];
+  }
+
+  get redCards() {
+    return this.cards.filter(
+      card => card.role === Role.Agent && card.color === TeamColor.Red
+    );
+  }
+
+  get blueCards() {
+    return this.cards.filter(
+      card => card.role === Role.Agent && card.color === TeamColor.Blue
+    );
+  }
+
+  get winningTeam(): Team {
+    if (this.redCards.reduce((acc, card) => acc || card.revealed, false)) {
+      return this.redTeam;
+    }
+
+    if (this.blueCards.reduce((acc, card) => acc || card.revealed, false)) {
+      return this.blueTeam;
+    }
   }
 
   /**
@@ -72,8 +94,11 @@ export const typeDef = gql`
   type Game {
     id: String!
     createdBy: Player!
+
     redTeam: Team!
     blueTeam: Team!
+    winningTeam: Team
+
     cards: [Card!]!
   }
 `;
