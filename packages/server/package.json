@@ -10,11 +10,11 @@
     "test": "ava"
   },
   "dependencies": {
-    "apollo-server": "^2.0.0",
+    "apollo-server": "^2.0.4",
     "casual": "^1.5.19",
     "graphql": "^0.13.2",
     "lodash": "^4.17.10",
-    "ts-node": "^7.0.0",
+    "ts-node": "^7.0.1",
     "typescript": "^3.0.1"
   },
   "devDependencies": {
