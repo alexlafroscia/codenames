@@ -3,27 +3,36 @@ import DB from "../../utils/db";
 import generateID from "../../utils/generate-id";
 import shuffle from "../../utils/shuffle";
 import Player from "../Player";
+import Team from "../Team";
 import Card, { Role as CardRole } from "../Card";
 import { Color as TeamColor } from "../Team";
 import { AuthenticatedContext } from "../../context/authenticate";
 
 export default class Game {
-  id: String;
+  id: String = generateID();
 
   createdBy: Player;
-  players: Player[] = [];
 
   cards: Card[] = [];
 
   startingTeam: TeamColor;
+  redTeam: Team = new Team(TeamColor.Red);
+  blueTeam: Team = new Team(TeamColor.Blue);
 
   constructor(createdBy: Player) {
-    this.id = generateID();
-
     this.createdBy = createdBy;
-    this.players.push(createdBy);
 
     this.start();
+
+    if (this.startingTeam === TeamColor.Red) {
+      this.redTeam.players.push(createdBy);
+    } else {
+      this.blueTeam.players.push(createdBy);
+    }
+  }
+
+  get players() {
+    return [...this.redTeam.players, ...this.blueTeam.players];
   }
 
   /**
@@ -63,8 +72,9 @@ export const typeDef = gql`
   type Game {
     id: String!
     createdBy: Player!
-    players: [Player]
-    cards: [Card!]
+    redTeam: Team!
+    blueTeam: Team!
+    cards: [Card]!
   }
 `;
 
@@ -99,7 +109,11 @@ export const resolvers = {
         throw new ApolloError("User is already in game");
       }
 
-      game.players.push(currentPlayer);
+      if (game.blueTeam.players.length >= game.redTeam.players.length) {
+        game.redTeam.players.push(currentPlayer);
+      } else {
+        game.blueTeam.players.push(currentPlayer);
+      }
 
       return game;
     },

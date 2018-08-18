@@ -1,6 +1,7 @@
 import anyTest, { TestInterface } from "ava";
 import Game, { GameContext, resolvers } from ".";
 import Player from "../Player";
+import { Color as TeamColor } from "../Team";
 import { AuthenticatedContext } from "../../context/authenticate";
 import DB from "../../utils/db";
 
@@ -37,19 +38,27 @@ test("querying for a game", t => {
 });
 
 test("creating a game", t => {
+  t.plan(3);
+
   const { requestContext } = t.context;
+  const { currentPlayer } = requestContext;
   const game = createGame({}, {}, requestContext);
 
   t.true(game instanceof Game, "A game is returned");
   t.is(
     game.createdBy,
-    requestContext.currentPlayer,
+    currentPlayer,
     "The game was created by the current user"
   );
+
+  if (game.startingTeam === TeamColor.Blue) {
+    t.deepEqual(game.blueTeam.players, [currentPlayer]);
+  } else if (game.startingTeam === TeamColor.Red) {
+    t.deepEqual(game.redTeam.players, [currentPlayer]);
+  }
 });
 
 test("joining a game that the player is not already in", t => {
-  const { currentPlayer } = t.context.requestContext;
   const newPlayer = new Player();
   t.context.requestContext.currentPlayer = newPlayer;
 
@@ -59,10 +68,12 @@ test("joining a game that the player is not already in", t => {
     t.context.requestContext
   );
 
-  t.deepEqual(
-    updatedGame.players,
-    [currentPlayer, newPlayer],
-    "The new player was added to the game"
+  t.is(updatedGame.players.length, 2, "The new player was added to the game");
+
+  t.is(
+    updatedGame.redTeam.players.length,
+    updatedGame.blueTeam.players.length,
+    "The new player was added to the opposite team"
   );
 });
 
