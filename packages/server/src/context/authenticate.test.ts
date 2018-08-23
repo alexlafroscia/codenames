@@ -48,7 +48,7 @@ test("it throws an error if there is a header that does not match a user", t => 
 test("it assigns a new user if there is no header", t => {
   t.context.info.req.headers.authentication = "";
   const context = {
-    players: new DB()
+    players: new DB<Player>()
   };
 
   const resultingContext = authenticate(t.context.info, context);

@@ -1,9 +1,16 @@
+import { get } from "lodash";
 import { context as Players } from "../types/Player";
 import { context as Games } from "../types/Game";
 import authentication from "./authenticate";
 
-type RequestInfo = object;
 type Context<T = {}> = { [P in keyof T]: T[P] };
+type RequestInfo = {
+  req?: object;
+  res?: object;
+  connection?: {
+    context?: Context;
+  };
+};
 type ContextCreator<T = {}> = (
   info: RequestInfo,
   context?: Context
@@ -25,10 +32,12 @@ type ContextCreator<T = {}> = (
 export function buildContext(
   ...contextFunctions: ContextCreator[]
 ): (RequestInfo) => Context {
-  return function(param: RequestInfo) {
+  return function(requestInfo: RequestInfo) {
+    const initialContext: Context = get(requestInfo, "connection.context", {});
+
     return contextFunctions.reduce((acc, fn) => {
-      return { ...acc, ...fn(param, acc) };
-    }, {});
+      return { ...acc, ...fn(requestInfo, acc) };
+    }, initialContext);
   };
 }
 
