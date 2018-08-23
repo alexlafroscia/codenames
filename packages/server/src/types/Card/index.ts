@@ -1,6 +1,9 @@
-import { gql } from "apollo-server";
+import { PubSub, gql, withFilter } from "apollo-server";
 import { Color } from "../Team";
 import { GameContext } from "../Game";
+
+const pubSub = new PubSub();
+const CARD_REVEALED = "CARD_REVEALED";
 
 export enum Role {
   Agent = "Agent",
@@ -44,7 +47,26 @@ export const resolvers = {
 
       card.revealed = true;
 
+      pubSub.publish(CARD_REVEALED, {
+        gameId,
+        cardRevealed: {
+          index,
+          card
+        }
+      });
+
       return card;
+    }
+  },
+
+  Subscription: {
+    cardRevealed: {
+      subscribe: withFilter(
+        () => pubSub.asyncIterator(CARD_REVEALED),
+        (payload, variables) => {
+          return payload.gameId === variables.gameId;
+        }
+      )
     }
   }
 };
